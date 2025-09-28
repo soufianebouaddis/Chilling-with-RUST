@@ -21,7 +21,7 @@ pub fn router(pool: PgPool) -> Router {
         (status = 200, description = "List all todos", body = [Todo])
     )
 )]
-async pub fn get_todos(State(pool): State<PgPool>) -> Json<Vec<Todo>> {
+pub async fn get_todos(State(pool): State<PgPool>) -> Json<Vec<Todo>> {
     let todos = sqlx::query_as::<_, Todo>("SELECT * FROM todos")
         .fetch_all(&pool)
         .await
@@ -37,7 +37,7 @@ async pub fn get_todos(State(pool): State<PgPool>) -> Json<Vec<Todo>> {
         (status = 201, description = "Todo created successfully", body = Todo)
     )
 )]
-async pub fn create_todo(State(pool): State<PgPool>, Json(payload): Json<CreateTodo>) -> Json<Todo> {
+pub async fn create_todo(State(pool): State<PgPool>, Json(payload): Json<CreateTodo>) -> Json<Todo> {
     let todo = sqlx::query_as::<_, Todo>(
         "INSERT INTO todos (id, title, completed) VALUES ($1, $2, $3) RETURNING *",
     )
