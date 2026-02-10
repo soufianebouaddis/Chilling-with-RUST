@@ -14,3 +14,9 @@ pub struct Todo {
 pub struct CreateTodo {
     pub title: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
+pub struct UpdateTodo {
+    pub title: Option<String>,
+    pub completed: Option<bool>,
+}
