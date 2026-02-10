@@ -2,6 +2,7 @@ use axum::Router;
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 use std::net::SocketAddr;
+use tracing_subscriber::EnvFilter;
 
 
 mod routes;
@@ -12,7 +13,12 @@ mod config;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    tracing_subscriber::fmt::init();
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            EnvFilter::from_default_env()
+                .add_directive("info".parse().unwrap()),
+        )
+        .init();
     let pool = db::init_db().await?;
     let app = Router::new()
         .merge(routes::todos::router(pool.clone()))
